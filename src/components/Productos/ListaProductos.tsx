@@ -7,8 +7,10 @@ import {
 	FaPlus,
 	FaMinus,
 	FaAngleRight,
-	FaAngleLeft
+	FaAngleLeft,
+	FaArrowLeft
 } from 'react-icons/fa';
+import Loader from '../Loader';
 const initialState: Producto = {
 	url_foto_producto: '',
 	nombre_producto: '',
@@ -18,9 +20,10 @@ const initialState: Producto = {
 const ListaProductos = () => {
 	const [productos, setProductos] = useState<Producto[]>([]);
 	const [producto, setProducto] = useState<Producto>(initialState);
+	const [loading, setLoading] = useState(false);
 	const [modal, setModal] = useState<Modal>({
 		producto: initialState,
-		display: false,
+		amount: 0,
 		index: 0
 	});
 	useEffect(() => {
@@ -32,6 +35,7 @@ const ListaProductos = () => {
 	}, []);
 
 	const getProductos = async () => {
+		setLoading(true);
 		firebase.collection('productos').onSnapshot((querySnapshot) => {
 			const docs: Producto[] = [];
 			querySnapshot.forEach((doc) => {
@@ -43,12 +47,14 @@ const ListaProductos = () => {
 				});
 			});
 			setProductos(docs);
+			setLoading(false);
 		});
 	};
 
 	return (
-		<div className='container mb-5'>
+		<div className='container mb-5 main-container' >
 			<div className='row'>
+				{loading ? <Loader /> : null}
 				{productos.map((producto, index) => {
 					return (
 						<>
@@ -68,9 +74,12 @@ const ListaProductos = () => {
 									</div>
 									<div className='card-footer d-flex'>
 										<button
+											type='button'
 											className='btn bg-verde bg-gradient ms-auto'
+											data-bs-toggle='modal'
+											data-bs-target='#staticBackdrop'
 											onClick={() => {
-												setModal({ producto, display: true, index: index + 1 });
+												setModal({ producto, amount: 0, index: index + 1 });
 											}}>
 											<FaShoppingCart className='mb-1' /> Comprar
 										</button>
@@ -81,18 +90,26 @@ const ListaProductos = () => {
 					);
 				})}
 			</div>
-			<div className={modal.display ? 'modal-product' : 'modal-product hidden'}>
+
+			<div
+				className='modal-product modal fade'
+				id='staticBackdrop'
+				data-bs-backdrop='static'
+				data-bs-keyboard='false'
+				tabIndex={-1}
+				aria-labelledby='staticBackdropLabel'
+				aria-hidden='false'>
 				<div className='modal-product-content'>
 					<button
 						className='btn bg-verde bg-gradient cancel'
 						onClick={() => {
 							setModal({
 								producto: initialState,
-								display: false,
+								amount: 0,
 								index: 0
 							});
 						}}>
-						<FaAngleLeft />
+						<FaArrowLeft />
 					</button>
 					<button
 						className='btn bg-verde bg-gradient previous'
@@ -102,7 +119,7 @@ const ListaProductos = () => {
 							}
 							setModal({
 								producto: productos[modal.index - 2],
-								display: true,
+								amount: 0,
 								index: modal.index - 1
 							});
 						}}>
@@ -116,7 +133,7 @@ const ListaProductos = () => {
 							}
 							setModal({
 								producto: productos[modal.index],
-								display: true,
+								amount: 0,
 								index: modal.index + 1
 							});
 						}}>
@@ -139,13 +156,28 @@ const ListaProductos = () => {
 							src={modal.producto.url_foto_producto}
 							alt={modal.producto.nombre_producto}
 						/>
-						<div className='modal-detail-footer'>
+						<div className='modal-detail-bottom'>
 							<div className='buttons'>
-								<button className='btn bg-verde bg-gradient '>
+								<button
+									className='btn bg-verde bg-gradient'
+									onClick={() => {
+										if (modal.amount === 0) {
+											return;
+										}
+										setModal({ ...modal, amount: modal.amount - 1 });
+									}}>
+									<FaMinus />
+								</button>
+								<p className='amount'>{modal.amount}</p>
+								<button
+									className='btn bg-verde bg-gradient ms-2'
+									onClick={() => {
+										setModal({ ...modal, amount: modal.amount + 1 });
+									}}>
 									<FaPlus />
 								</button>
-								<button className='btn bg-verde bg-gradient ms-2'>
-									<FaMinus />
+								<button className='btn bg-rojo bg-gradient ms-2'>
+									Añadir <FaShoppingCart />
 								</button>
 							</div>
 							<p className='price'>S/{modal.producto.precio}</p>

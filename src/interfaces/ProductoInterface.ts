@@ -6,6 +6,6 @@ export interface Producto {
 }
 export interface Modal {
 	producto: Producto;
-	display: boolean;
+	amount: number;
 	index: number;
 }
