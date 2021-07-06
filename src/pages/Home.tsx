@@ -1,16 +1,14 @@
 import React from "react";
-import Footer from "../partials/Footer";
-import Header from "../partials/Header";
 
-import huevosPardos from '../img/lacalera-huevos-pardos.png'
-import fritata from '../img/frittata.png'
-import huevosJumbo from '../img/huevo-jumbo.png'
-import huevosSuperJumbo from '../img/huevos-pardos-super-jumbo.png'
+import huevosPardos from '../img/lacalera-huevos-pardos.png';
+import fritata from '../img/frittata.png';
+import huevosJumbo from '../img/huevo-jumbo.png';
+import huevosSuperJumbo from '../img/huevos-pardos-super-jumbo.png';
 
 const Home = () => {
+
     return (
         <>
-            <Header />
             <main>
                 <section className="w-100" style={{ minHeight: "calc(100vh - 100px)" }}>
                     <div className="w-100 position-relative" style={{ minHeight: "calc(100vh - 100px)" }}>
@@ -74,7 +72,6 @@ const Home = () => {
                     </div>
                 </section>
             </main>
-            <Footer />
         </>
     );
 };
