@@ -342,13 +342,13 @@ section .title {
 	width: 200%;
 	background: #fff;
 	border-radius: 45%;
-	animation: spin 1s ease-in-out infinite;
+	animation: spin 1.5s ease-in-out infinite;
 }
 @keyframes spin {
 	0% {
 		transform: translateY(0) rotateY(0deg);
 	}
 	100% {
-		transform: translateY(-100%) rotate(500deg);
+		transform: translateY(-80%) rotate(360deg);
 	}
 }

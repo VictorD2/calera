@@ -20,7 +20,7 @@ const initialState: Producto = {
 const ListaProductos = () => {
 	const [productos, setProductos] = useState<Producto[]>([]);
 	const [producto, setProducto] = useState<Producto>(initialState);
-	const [loading, setLoading] = useState(false);
+	const [isLoading, setLoading] = useState(false);
 	const [modal, setModal] = useState<Modal>({
 		producto: initialState,
 		amount: 0,
@@ -52,9 +52,9 @@ const ListaProductos = () => {
 	};
 
 	return (
-		<div className='container mb-5 main-container' >
+		<div className='container mb-5 main-container'>
 			<div className='row'>
-				{loading ? <Loader /> : null}
+				{isLoading ? <Loader /> : null}
 				{productos.map((producto, index) => {
 					return (
 						<>
@@ -86,104 +86,103 @@ const ListaProductos = () => {
 									</div>
 								</div>
 							</div>
+							<div
+								className='modal-product modal fade'
+								id='staticBackdrop'
+								data-bs-backdrop='static'
+								data-bs-keyboard='false'
+								tabIndex={-1}
+								aria-labelledby='staticBackdropLabel'
+								aria-hidden='false'>
+								<div className='modal-product-content'>
+									<button
+										className='btn bg-verde bg-gradient cancel'
+										onClick={() => {
+											setModal({
+												producto: initialState,
+												amount: 0,
+												index: 0
+											});
+										}}>
+										<FaArrowLeft />
+									</button>
+									<button
+										className='btn bg-verde bg-gradient previous'
+										onClick={() => {
+											if (modal.index === 1) {
+												return;
+											}
+											setModal({
+												producto: productos[modal.index - 2],
+												amount: 0,
+												index: modal.index - 1
+											});
+										}}>
+										<FaAngleLeft />
+									</button>
+									<button
+										className='btn bg-verde bg-gradient next'
+										onClick={() => {
+											if (modal.index === productos.length) {
+												return;
+											}
+											setModal({
+												producto: productos[modal.index],
+												amount: 0,
+												index: modal.index + 1
+											});
+										}}>
+										<FaAngleRight />
+									</button>
+									<div className='image-reference'>
+										<div className='gradient'>
+											<p>{modal.index}</p>
+											<p className='stock'>{`/ ${productos.length}`}</p>
+										</div>
+										<img
+											src='https://www.elindependiente.com/wp-content/uploads/2018/05/6166515520_fa60e2d761_o.jpg'
+											alt=''
+										/>
+									</div>
+									<div className='modal-detail'>
+										<p className='modal-detail-title'>{modal.producto.nombre_producto}</p>
+										<img
+											className='modal-detail-image'
+											src={modal.producto.url_foto_producto}
+											alt={modal.producto.nombre_producto}
+										/>
+										<div className='modal-detail-bottom'>
+											<div className='buttons'>
+												<button
+													className='btn bg-verde bg-gradient'
+													onClick={() => {
+														if (modal.amount === 0) {
+															return;
+														}
+														setModal({ ...modal, amount: modal.amount - 1 });
+													}}>
+													<FaMinus />
+												</button>
+												<p className='amount'>{modal.amount}</p>
+												<button
+													className='btn bg-verde bg-gradient ms-2'
+													onClick={() => {
+														setModal({ ...modal, amount: modal.amount + 1 });
+													}}>
+													<FaPlus />
+												</button>
+												<button className='btn bg-rojo bg-gradient ms-2'>
+													Añadir <FaShoppingCart />
+												</button>
+											</div>
+											<p className='price'>S/{modal.producto.precio}</p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</>
 					);
 				})}
-			</div>
-
-			<div
-				className='modal-product modal fade'
-				id='staticBackdrop'
-				data-bs-backdrop='static'
-				data-bs-keyboard='false'
-				tabIndex={-1}
-				aria-labelledby='staticBackdropLabel'
-				aria-hidden='false'>
-				<div className='modal-product-content'>
-					<button
-						className='btn bg-verde bg-gradient cancel'
-						onClick={() => {
-							setModal({
-								producto: initialState,
-								amount: 0,
-								index: 0
-							});
-						}}>
-						<FaArrowLeft />
-					</button>
-					<button
-						className='btn bg-verde bg-gradient previous'
-						onClick={() => {
-							if (modal.index === 1) {
-								return;
-							}
-							setModal({
-								producto: productos[modal.index - 2],
-								amount: 0,
-								index: modal.index - 1
-							});
-						}}>
-						<FaAngleLeft />
-					</button>
-					<button
-						className='btn bg-verde bg-gradient next'
-						onClick={() => {
-							if (modal.index === productos.length) {
-								return;
-							}
-							setModal({
-								producto: productos[modal.index],
-								amount: 0,
-								index: modal.index + 1
-							});
-						}}>
-						<FaAngleRight />
-					</button>
-					<div className='image-reference'>
-						<div className='gradient'>
-							<p>{modal.index}</p>
-							<p className='stock'>{`/ ${productos.length}`}</p>
-						</div>
-						<img
-							src='https://www.elindependiente.com/wp-content/uploads/2018/05/6166515520_fa60e2d761_o.jpg'
-							alt=''
-						/>
-					</div>
-					<div className='modal-detail'>
-						<p className='modal-detail-title'>{modal.producto.nombre_producto}</p>
-						<img
-							className='modal-detail-image'
-							src={modal.producto.url_foto_producto}
-							alt={modal.producto.nombre_producto}
-						/>
-						<div className='modal-detail-bottom'>
-							<div className='buttons'>
-								<button
-									className='btn bg-verde bg-gradient'
-									onClick={() => {
-										if (modal.amount === 0) {
-											return;
-										}
-										setModal({ ...modal, amount: modal.amount - 1 });
-									}}>
-									<FaMinus />
-								</button>
-								<p className='amount'>{modal.amount}</p>
-								<button
-									className='btn bg-verde bg-gradient ms-2'
-									onClick={() => {
-										setModal({ ...modal, amount: modal.amount + 1 });
-									}}>
-									<FaPlus />
-								</button>
-								<button className='btn bg-rojo bg-gradient ms-2'>
-									Añadir <FaShoppingCart />
-								</button>
-							</div>
-							<p className='price'>S/{modal.producto.precio}</p>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 	);
