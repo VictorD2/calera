@@ -1,0 +1,46 @@
+:root {
+    --marron-claro: #363636;
+    --verde-oscuro: #00852c;
+    --verde-claro: #06a53b;
+}
+
+body {
+    font-family: Helvetica, Arial, sans-serif !important;
+}
+
+footer {
+    background: var(--marron-claro);
+    color: #FFFFFF;
+    padding: 8rem 5rem;
+}
+
+.link-normal {
+    color: var(--verde-oscuro);
+}
+
+.link-normal:hover {
+    color: var(--verde-claro);
+}
+
+.boton-primario {
+    background: var(--verde-oscuro) !important;
+    color: #FFFFFF !important;
+}
+
+.boton-primario:hover {
+    background: var(--verde-claro) !important;
+}
+
+.btn-size {
+    width: 13rem;
+}
+
+@media screen and (max-width: 768px) {
+    footer {
+        padding: 1rem
+    }
+
+    .btn-size {
+        width: 100%;
+    }
+}
